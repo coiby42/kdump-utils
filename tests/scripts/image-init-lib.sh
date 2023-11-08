@@ -178,11 +178,17 @@ mount_image() {
 	$SUDO mount $mnt_dev $mnt
 	[ $? -ne 0 ] && perror_exit "failed to mount device '$mnt_dev'"
 	boot=$(get_mount_boot "$dev")
+	root=$(get_image_mount_root $image)
 	if [[ -n "$boot" ]]; then
-		root=$(get_image_mount_root $image)
 		$SUDO mount $boot $root/boot
 		[ $? -ne 0 ] && perror_exit "failed to mount the bootable partition for device '$mnt_dev'"
 	fi
+
+	# bind-mount /proc/ and /dev to support process substitution <(command)
+	# Currently needed for setting up the crashkernel kernel parameter
+	for target in proc dev; do
+		$SUDO	mount -o bind /$target $root/$target
+	done
 }
 
 get_image_mount_root() {
