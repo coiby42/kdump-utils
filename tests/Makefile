@@ -32,6 +32,8 @@ KEXEC_TOOLS_SRC = $(filter-out $(REPO)/tests,$(wildcard $(REPO)/*))
 KEXEC_TOOLS_TEST_SRC = $(wildcard $(REPO)/tests/scripts/**/*)
 KEXEC_TOOLS_NVR = $(shell rpm $(RPMDEFINE) -q --specfile $(REPO)/$(SPEC) 2>/dev/null | grep -m 1 . | sed -e 's#.src#.$(ARCH)#')
 KEXEC_TOOLS_RPM = $(BUILD_ROOT)/$(ARCH)/$(KEXEC_TOOLS_NVR).rpm
+MAKEDUMPFILE_NVR = $(shell rpm $(RPMDEFINE) -q --specfile $(REPO)/$(SPEC) 2>/dev/null | grep -m 2 . | tail -1 | sed -e 's#.src#.$(ARCH)#')
+MAKEDUMPFILE_RPM = $(BUILD_ROOT)/$(ARCH)/$(MAKEDUMPFILE_NVR).rpm
 
 all: $(TEST_ROOT)/output/test-base-image
 
@@ -67,14 +69,14 @@ $(BUILD_ROOT)/inst-base-image: $(BUILD_ROOT)/base-image
 		$(BUILD_ROOT)/inst-base-image \
 		$(TEST_ROOT)/scripts/build-scripts/base-image.sh
 
-$(TEST_ROOT)/output/test-base-image: $(BUILD_ROOT)/inst-base-image $(KEXEC_TOOLS_RPM) $(KEXEC_TOOLS_TEST_SRC) $(EXTRA_RPMS)
+$(TEST_ROOT)/output/test-base-image: $(BUILD_ROOT)/inst-base-image $(KEXEC_TOOLS_RPM) $(MAKEDUMPFILE_RPM) $(KEXEC_TOOLS_TEST_SRC) $(EXTRA_RPMS)
 	@echo "Building test base image"
 	mkdir -p $(TEST_ROOT)/output
 	$(TEST_ROOT)/scripts/build-image.sh \
 		$(BUILD_ROOT)/inst-base-image \
 		$(TEST_ROOT)/output/test-base-image \
 		$(TEST_ROOT)/scripts/build-scripts/test-base-image.sh \
-		$(KEXEC_TOOLS_RPM) $(EXTRA_RPMS)
+		$(KEXEC_TOOLS_RPM) $(MAKEDUMPFILE_RPM) $(EXTRA_RPMS)
 
 test-run: $(TEST_ROOT)/output/test-base-image
 ifeq ($(strip $(TEST_CASE)),)
