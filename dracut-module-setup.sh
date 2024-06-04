@@ -1043,6 +1043,13 @@ kdump_check_crypt_targets() {
     echo >"$initdir/etc/cmdline.d/90crypt.conf"
     echo >"$initdir/etc/crypttab"
 
+    # latest systemd makes /usr read-only by default
+    mkdir -p "${initdir}/etc/systemd/system.conf.d"
+    {
+        echo "[Manager]"
+        echo "ProtectSystem=false"
+    } >>"${initdir}/etc/systemd/system.conf.d/kdump_luks.conf"
+
     dracut_need_initqueue
 }
 
