@@ -126,13 +126,19 @@ get_mountable_dev() {
 }
 
 # get the separate boot partition
-# return the 2nd partition as boot partition
+# return the 2nd to the last partition as boot partition
 get_mount_boot() {
 	local dev=$1 _second_part=${dev}p2
 
 	# it's better to check if the 2nd partition has the boot label using lsblk
 	# but somehow this doesn't work starting with Fedora37
-	echo $_second_part
+	$SUDO partprobe $dev && sync
+	parts="$(ls -1 ${dev}p*)"
+	if [ -n "$parts" ]; then
+	        if [ $(echo "$parts" | wc -l) -gt 1 ]; then
+	                echo "$parts" | tail -2 | head -1
+	        fi
+	fi
 }
 
 
