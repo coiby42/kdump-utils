@@ -55,7 +55,7 @@ rlJournalStart
         # And this test will be executed infinitely
         rlRun "sync"
         rlRun "echo 1 > /proc/sys/kernel/sysrq"
-        rlRun "echo c > /proc/sysrq-trigger"
+        tmt-reboot -c "echo c > /proc/sysrq-trigger"
     rlPhaseEnd
 
   else
