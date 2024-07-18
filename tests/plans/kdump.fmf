@@ -34,5 +34,14 @@ provision:
      how: virtual
      image: fedora:40
 
+prepare:
+  - name: permit_root
+    how: shell
+    script:
+      - echo root:kdump | chpasswd
+    where:
+      - client
+      - server
+
 execute:
     how: tmt
