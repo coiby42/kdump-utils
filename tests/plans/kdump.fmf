@@ -34,5 +34,12 @@ provision:
      how: virtual
      image: fedora:40
 
+prepare:
+  # Set root password to log in as root in the console
+  - name: Set root password
+    how: shell
+    script:
+      - echo root:kdump | chpasswd
+
 execute:
     how: tmt
