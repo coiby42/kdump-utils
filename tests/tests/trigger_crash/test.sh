@@ -46,7 +46,7 @@ rlJournalStart
         rlAssertGrep "^1$" /sys/kernel/kexec_crash_loaded
         rlRun "sync"
         rlRun "echo 1 > /proc/sys/kernel/sysrq"
-        rlRun "echo c > /proc/sysrq-trigger"
+        tmt-reboot -c "echo c > /proc/sysrq-trigger"
     rlPhaseEnd
   fi
 rlJournalEnd
