@@ -45,7 +45,7 @@ rlJournalStart
         rlRun "kdumpctl restart" || rlDie "Failed to restart kdump"
         rlRun "sync"
         rlRun "echo 1 > /proc/sys/kernel/sysrq"
-        rlRun "echo c > /proc/sysrq-trigger"
+        tmt-reboot -c "echo c > /proc/sysrq-trigger"
     rlPhaseEnd
   fi
 rlJournalEnd
