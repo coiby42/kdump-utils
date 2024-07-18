@@ -1,0 +1,5 @@
+summary: Setup NFS server for saving vmcore
+test: ./test.sh
+require:
+- nfs-utils
+framework: beakerlib
