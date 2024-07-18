@@ -1,0 +1,5 @@
+summary: Dump kernel crash to an NFS server
+test: ./test.sh
+framework: beakerlib
+require:
+- nfs-utils

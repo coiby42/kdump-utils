@@ -1,0 +1,38 @@
+summary: Kdump tests
+discover:
+  - name: client-setup
+    how: fmf
+    test:
+     - setup/kdump
+    where:
+      - client
+  - name: server-setup
+    how: fmf
+    test:
+     - setup/nfs_server
+    where:
+      - server
+  - name: client-test
+    how: fmf
+    test:
+     - /tests/client
+    where:
+      - client
+  - name: server-test
+    how: fmf
+    test:
+     - /tests/server
+    where:
+      - server
+
+provision:
+   - name: server
+     how: virtual
+     image: fedora:40
+
+   - name: client
+     how: virtual
+     image: fedora:40
+
+execute:
+    how: tmt
