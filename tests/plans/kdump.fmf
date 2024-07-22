@@ -53,5 +53,12 @@ prepare:
     where:
       - client
 
+  - name: Install built RPM
+    how: install
+    package:
+      - "$KDUMP_UTILS_RPM"
+    where:
+      - client
+
 execute:
     how: tmt
