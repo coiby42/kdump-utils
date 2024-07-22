@@ -35,6 +35,13 @@ provision:
      image: fedora:40
 
 prepare:
+  - name: Install built RPM
+    how: install
+    package:
+      - "$KDUMP_UTILS_RPM"
+    where:
+      - client
+
   - name: permit_root
     how: shell
     script:
