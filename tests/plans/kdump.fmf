@@ -1,40 +1,15 @@
-summary: Kdump tests
-discover:
-  - name: client-setup
-    how: fmf
-    test:
-     - setup/kdump
-    where:
-      - client
-  - name: server-setup
-    how: fmf
-    test:
-     - setup/nfs_server
-    where:
-      - server
-  - name: client-test
-    how: fmf
-    test:
-     - /tests/client
-    where:
-      - client
-  - name: server-test
-    how: fmf
-    test:
-     - /tests/server
-    where:
-      - server
-
-provision:
-   - name: server
-     how: virtual
-     image: fedora:40
-
-   - name: client
-     how: virtual
-     image: fedora:40
 
 prepare:
+  - name: use custom mirror
+    how: shell
+    script:
+      - test -v CUSTOM_MIRROR && sed -e 's/^metalink=/#metalink=/g' -e "s|^#baseurl=http://download.example/pub/fedora/linux|baseurl=${CUSTOM_MIRROR}|g" -i.bak /etc/yum.repos.d/*.repo
+
+  - name: permit_root
+    how: shell
+    script:
+      - echo root:kdump | chpasswd
+
   - name: Install built RPM
     how: install
     package:
@@ -42,20 +17,68 @@ prepare:
     where:
       - client
 
-  - name: permit_root
-    how: shell
-    script:
-      - echo root:kdump | chpasswd
-    where:
-      - client
-      - server
-
 execute:
     how: tmt
 
-adjust:
-  - when: custom_mirror is defined
-    prepare+:
-      - how: shell
-        script:
-          - sed -e 's/^metalink=/#metalink=/g' -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=$@custom_mirror|g' -i.bak /etc/yum.repos.d/*.repo
+discover:
+  - name: server-setup
+    order: 10
+    how: fmf
+    test:
+     - setup/nfs_server
+    where:
+      - server
+  - name: server-test
+    how: fmf
+    test:
+     - /tests/server
+    where:
+      - server
+
+/nfs-kdump:
+    summary: NFS Kdump tests
+    discover+:
+      - name: client-setup
+        order: 20
+        how: fmf
+        test:
+         - setup/kdump
+        where:
+          - client
+      - name: client-test
+        how: fmf
+        order: 40
+        test:
+         - /tests/client
+        where:
+          - client
+    provision:
+      - name: server
+        how: virtual
+        image: fedora:40
+        connection: system
+      - name: client
+        how: virtual
+        image: fedora:40
+        connection: system
+
+/local-kdump:
+    discover:
+      - name: client-setup
+        how: fmf
+        test:
+         - setup/kdump
+
+      - name: local-test
+        how: fmf
+        test:
+         - /tests/local
+        where:
+          - client
+    provision:
+      - name: client
+        how: virtual
+        image: fedora:40
+        connection: system
+
+
