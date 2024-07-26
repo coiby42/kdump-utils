@@ -1,1 +1,10 @@
-summary: Check vmcore on NFS server
+
+/nfs:
+    summary: Check vmcore on NFS server
+    environment:
+        VMCORE_PATH: /var/tmp/nfsshare/var/crash
+
+/local:
+    summary: Check vmcore locally
+    environment:
+        VMCORE_PATH: /var/crash

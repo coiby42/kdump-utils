@@ -2,7 +2,7 @@
 MAX_WAIT_TIME=300
 _waited=0
 while [ $_waited -le $MAX_WAIT_TIME ]; do
-    if ls /var/tmp/nfsshare/var/crash/*/vmcore &> /dev/null; then
+    if ls $VMCORE_PATH/*/vmcore &> /dev/null; then
         echo "Vmcore found!"
         exit 0
     fi

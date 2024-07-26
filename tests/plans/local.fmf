@@ -1,0 +1,20 @@
+summary: Kdump local dumping
+discover:
+  - name: Setup crashkernel
+    test:
+     - setup/default_crashkernel
+
+  - name: Panic kernel
+    how: fmf
+    test:
+     - /tests/trigger_crash
+
+  - name: Check vmcore
+    how: fmf
+    test:
+     - /tests/check_vmcore/local
+
+provision:
+   - name: client
+     how: virtual
+     connection: system
