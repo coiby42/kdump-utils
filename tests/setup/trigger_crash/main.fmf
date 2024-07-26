@@ -1,3 +1,1 @@
-summary: Dump kernel crash to an NFS server
-require:
-- nfs-utils
+summary: Trigger a kernel panic
