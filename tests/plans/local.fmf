@@ -1,0 +1,23 @@
+summary: Kdump local dumping
+# Disable this plan due to https://bugzilla.redhat.com/show_bug.cgi?id=2270423
+enabled: false
+discover:
+  - name: Setup crashkernel
+    how: fmf
+    test:
+     - setup/default_crashkernel
+
+  - name: Panic kernel
+    how: fmf
+    test:
+     - /tests/trigger_crash
+
+  - name: Check vmcore
+    how: fmf
+    test:
+     - /tests/check_vmcore/local
+
+provision:
+   - name: client
+     how: virtual
+     connection: system
