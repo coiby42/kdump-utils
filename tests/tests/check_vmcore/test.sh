@@ -1,5 +1,4 @@
 #!/bin/sh -eux
-
 has_valid_vmcore_dir() {
 	local path=$1
 	local vmcore_dir
@@ -48,7 +47,7 @@ has_valid_vmcore_dir() {
 	return 0
 }
 
-if ! has_valid_vmcore_dir "/var/tmp/nfsshare/var/crash/"; then
+if ! has_valid_vmcore_dir "$VMCORE_PATH"; then
 	echo "No Vmcore found!" 1>&2
 	exit 1
 fi
