@@ -1,3 +1,4 @@
+framework: shell
 
 /nfs:
     summary: Set up NFS dumping target
@@ -5,6 +6,13 @@
     - nfs-utils
     environment:
         REMOTE_TYPE: NFS
+
+/nfs_early:
+    summary: Set up NFS early dumping target
+    require:
+    - nfs-utils
+    environment:
+        REMOTE_TYPE: NFS_EARLY
 
 /ssh:
     summary: Set up SSH dumping target
