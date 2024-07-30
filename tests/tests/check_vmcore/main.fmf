@@ -11,3 +11,8 @@ require:
     summary: Check vmcore locally
     environment:
         VMCORE_PATH: /var/crash
+
+/ssh:
+    summary: Check vmcore on SSH SERVER
+    environment:
+        VMCORE_PATH: /var/crash
