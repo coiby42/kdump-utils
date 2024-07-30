@@ -1,0 +1,26 @@
+summary: Kdump NFS early dumping tests
+discover:
+  - name: Setup crashkernel
+    how: fmf
+    test:
+     - setup/default_crashkernel
+    where:
+      - client
+  - name: Setup NFS server
+    how: fmf
+    test:
+     - setup/nfs_server
+    where:
+      - server
+  - name: Setup NFS client
+    how: fmf
+    test:
+     - setup/network_client/nfs_early
+    where:
+      - client
+  - name: Check vmcore
+    how: fmf
+    test:
+     - /tests/check_vmcore/nfs
+    where:
+      - server
