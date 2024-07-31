@@ -52,7 +52,7 @@ EOF
          mv /boot/initramfs-$(uname -r).img.bak /boot/initramfs-$(uname -r).img
          sync
          kexec -s -l /boot/vmlinuz-$(uname -r) --initrd=/boot/initramfs-$(uname -r).img.new --reuse-cmdline  --append=rd.earlykdump
-         systemctl kexec
+         tmt-reboot -c "systemctl kexec"
     fi
   elif [[ $REMOTE_TYPE == SSH ]]; then
     TMT_TEST_PLAN_ROOT=${TMT_PLAN_DATA%data}
