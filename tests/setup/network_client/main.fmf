@@ -1,3 +1,4 @@
+framework: shell
 
 /nfs:
     summary: Set up NFS dumping target
