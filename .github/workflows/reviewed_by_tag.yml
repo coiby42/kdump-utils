@@ -8,6 +8,15 @@ on:
       - submitted
 
 jobs:
+  checkout:
+      runs-on: ubuntu-latest
+      steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v4
+        with:
+            ref: ${{github.event.pull_request.head.ref}}
+            repository: ${{github.event.pull_request.head.repo.full_name}}
+
   approved:
     if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
